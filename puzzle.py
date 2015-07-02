@@ -11,23 +11,24 @@ class Puzzle:
         self.universe = universe
         self.visited = set()
 
-    def rotate(self,k):
+    def rotate(self, k):
         # Rotate the entire puzzle by k*90 degrees clockwise
         tempUni = self.universe
         self.universe = set([])
         for piece in tempUni:
             self.uinverse.add(piece.rotate(piece,k))
+        if k == 1 or k == 3:
+            temp = self.rows
+            self.rows = self.cols
+            self.cols = temp
 
-    def reflect(self,k):
+    def reflect(self):
         # Reflect entire puzzle left to right
         tempUni = self.universe
         self.universe = set([])
         for piece in tempUni:
             self.universe.add(piece.reflect())
-        if k == 1 or k == 3:
-            temp = self.rows
-            self.rows = self.cols
-            self.cols = temp
+
 
     def solve(self):
         print("Solving puzzle via cached DFS...")

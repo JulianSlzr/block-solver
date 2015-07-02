@@ -36,7 +36,7 @@ def growPiecesGen(row,col,avgSize):
         numSquares = 1
 
         """----------Specify the distribution of piece sizes here----------"""
-        variation = 0.33
+        variation = 0.5
         proportion = 1 - variation + 2*variation*random.random()
         pieceSize = math.floor(proportion*avgSize)
         #pieceSize = avgSize
@@ -125,8 +125,25 @@ def growPiecesGen(row,col,avgSize):
     # Print here to show a completed board
     #print(board)
 
-    #return pz.Puzzle(row,col,frozenset(pieces))
-    return board
+    puzzle = pz.Puzzle(row,col,frozenset(pieces))
+    #Pick an element of D8 to roughly fix corner biases
+    r = math.floor(random.random()*4)
+    s = math.floor(random.random()*2)
+
+    # This is just for drawing. Not necessary
+    board = np.rot90(board, r)
+    if s==1:
+        board = np.fliplr(board)
+
+    #Now manipulate actual puzzle
+    puzzle.rotate(r)
+    if s==1:
+        puzzle.reflect()
+
+    return puzzle
+
+    #Return/print board instead for drawing
+    #return board
 
 def removeLittleSquares(board, pieces):
     rows = board.shape[0]
