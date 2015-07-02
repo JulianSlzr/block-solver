@@ -24,6 +24,10 @@ class Puzzle:
         self.universe = set([])
         for piece in tempUni:
             self.universe.add(piece.reflect())
+        if k == 1 or k == 3:
+            temp = self.rows
+            self.rows = self.cols
+            self.cols = temp
 
     def solve(self):
         print("Solving puzzle via cached DFS...")
