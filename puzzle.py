@@ -11,6 +11,20 @@ class Puzzle:
         self.universe = universe
         self.visited = set()
 
+    def rotate(self,k):
+        # Rotate the entire puzzle by k*90 degrees clockwise
+        tempUni = self.universe
+        self.universe = set([])
+        for piece in tempUni:
+            self.uinverse.add(piece.rotate(piece,k))
+
+    def reflect(self,k):
+        # Reflect entire puzzle left to right
+        tempUni = self.universe
+        self.universe = set([])
+        for piece in tempUni:
+            self.universe.add(piece.reflect())
+
     def solve(self):
         print("Solving puzzle via cached DFS...")
         start = time.clock()
@@ -38,6 +52,18 @@ class Block:
         for i in range(0,self.rows):
             if self.config[i,0] != 0:
                 return self.config[i,0]
+
+    def rotate(self,k):
+        # Rotate the block by k*90 degrees clockwise
+        self.config = np.rot90(self.config,k)
+        self.rows = self.config.shape[0]
+        self.cols = self.config.shape[1]
+
+    def reflect(self):
+        # Reflect the block left to right
+        self.config = np.fliplr(self.config)
+
+
 
 class Placement:
     """This represents a block placed in the context of a board"""
