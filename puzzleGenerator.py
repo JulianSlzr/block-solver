@@ -3,9 +3,9 @@ import numpy as np
 import random
 import math
 
-import matrixvisualiser as mv
-
 remove1x1 = True
+changeByD8 = True
+colourDict = {0:"#ffffff",1:"#ffcc99",2:"#cccccc",3:"#cc00ff",4:"#00ffff",5:"#99ff99",6:"#ffccff",7:"#cc99cc",8:"#cccc00",9:"#00ccff",10:"#99ff00",11:"#990000",12:"#009900",13:"#ccff00",14:"#99ffcc",15:"#999999",16:"#ffcc00",17:"#00cc99",18:"#ff00ff",19:"#ff00cc",20:"#990099",21:"#0000cc",22:"#ccffff",23:"#ff9999",24:"#0099ff",25:"#99ffff",26:"#ff0000",27:"#99ccff",28:"#ccff99",29:"#00cc00",30:"#cc99ff",31:"#9900ff",32:"#0099cc",33:"#ff99cc",34:"#ff0099",35:"#009999",36:"#cc9900",37:"#ffff00",38:"#ff9900",39:"#9999cc",40:"#ffcccc",41:"#9999ff",42:"#ffff99",43:"#ccffcc",44:"#ff99ff",45:"#000099",46:"#ffffcc",47:"#0000ff",48:"#99cccc",49:"#cc0000",50:"#999900",51:"#99cc99",52:"#cccc99",53:"#00ffcc",54:"#00cccc",55:"#99cc00",56:"#00ff99",57:"#cc00cc",58:"#cc0099",59:"#00ff00",60:"#ccccff",61:"#cc9999",62:"#9900cc",63:"#000000"}
 
 class Point:
 
@@ -28,15 +28,15 @@ def growPiecesGen(row,col,avgSize):
     completed = False
     pieceNumber = 1 # Identifier for each piece, so boards are not just a matrix of ones
     while not completed:
-        """We try to add a block starting in 'next' position. Always connected, unlikely to be not simply connected.
-        During construction represent a piece by using a list of coordinates for the squares present"""
+        #We try to add a block starting in 'next' position. Always connected, unlikely to be not simply connected.
+        #During construction represent a piece by using a list of coordinates for the squares present
 
         tempBlock = [nextSquare]
         board[nextSquare.x, nextSquare.y] = pieceNumber
         numSquares = 1
 
-        """----------Specify the distribution of piece sizes here----------"""
-        variation = 0.5
+        #----------Specify the distribution of piece sizes here----------
+        variation = 0.2
         proportion = 1 - variation + 2*variation*random.random()
         pieceSize = math.floor(proportion*avgSize)
         #pieceSize = avgSize
@@ -122,23 +122,21 @@ def growPiecesGen(row,col,avgSize):
     if remove1x1:
         board = removeLittleSquares(board, pieces)
 
-    # Print here to show a completed board
-    #print(board)
-
     puzzle = pz.Puzzle(row,col,frozenset(pieces))
-    #Pick an element of D8 to roughly fix corner biases
-    r = math.floor(random.random()*4)
-    s = math.floor(random.random()*2)
+    if changeByD8:
+        #Pick an element of D8 to roughly fix corner biases
+        r = math.floor(random.random()*4)
+        s = math.floor(random.random()*2)
 
-    # This is just for drawing. Not necessary
-    board = np.rot90(board, r)
-    if s==1:
-        board = np.fliplr(board)
+        # This is just for drawing. Not necessary
+        board = np.rot90(board, r)
+        if s==1:
+            board = np.fliplr(board)
 
-    #Now manipulate actual puzzle
-    puzzle.rotate(r)
-    if s==1:
-        puzzle.reflect()
+        #Now manipulate actual puzzle
+        puzzle.rotate(r)
+        if s==1:
+            puzzle.reflect()
 
     return puzzle
 
